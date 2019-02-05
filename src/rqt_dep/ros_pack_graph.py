@@ -165,21 +165,21 @@ class RosPackGraph(Plugin):
         self._widget.hide_transitives_check_box.clicked.connect(self._refresh_rospackgraph)
         self._widget.show_system_check_box.clicked.connect(self._refresh_rospackgraph)
 
-        self._widget.refresh_graph_push_button.setIcon(QIcon.fromTheme('view-refresh'))
+        self._widget.refresh_graph_push_button.setIcon(QIcon.fromTheme('view-refresh', self.getPixmapIcon('view-refresh')))
         self._widget.refresh_graph_push_button.pressed.connect(self._update_rospackgraph)
 
         self._widget.highlight_connections_check_box.toggled.connect(self._refresh_rospackgraph)
         self._widget.auto_fit_graph_check_box.toggled.connect(self._refresh_rospackgraph)
-        self._widget.fit_in_view_push_button.setIcon(QIcon.fromTheme('zoom-original'))
+        self._widget.fit_in_view_push_button.setIcon(QIcon.fromTheme('zoom-original', self.getPixmapIcon('zoom-original')))
         self._widget.fit_in_view_push_button.pressed.connect(self._fit_in_view)
 
-        self._widget.load_dot_push_button.setIcon(QIcon.fromTheme('document-open'))
+        self._widget.load_dot_push_button.setIcon(QIcon.fromTheme('document-open', self.getPixmapIcon('document-open')))
         self._widget.load_dot_push_button.pressed.connect(self._load_dot)
-        self._widget.save_dot_push_button.setIcon(QIcon.fromTheme('document-save-as'))
+        self._widget.save_dot_push_button.setIcon(QIcon.fromTheme('document-save-as', self.getPixmapIcon('document-save-as')))
         self._widget.save_dot_push_button.pressed.connect(self._save_dot)
-        self._widget.save_as_svg_push_button.setIcon(QIcon.fromTheme('document-save-as'))
+        self._widget.save_as_svg_push_button.setIcon(QIcon.fromTheme('document-save-as', self.getPixmapIcon('document-save-as')))
         self._widget.save_as_svg_push_button.pressed.connect(self._save_svg)
-        self._widget.save_as_image_push_button.setIcon(QIcon.fromTheme('image'))
+        self._widget.save_as_image_push_button.setIcon(QIcon.fromTheme('image', self.getPixmapIcon('image-missing')))
         self._widget.save_as_image_push_button.pressed.connect(self._save_image)
 
         self._deferred_fit_in_view.connect(self._fit_in_view, Qt.QueuedConnection)
@@ -191,6 +191,11 @@ class RosPackGraph(Plugin):
         # - 1st filtering key is already input by user
         # - filtering key is restored
         self._filtering_started = False
+
+    def getPixmapIcon(self, name):
+        rp=rospkg.RosPack()
+        icon_file = os.path.join(rp.get_path('rqt_gui'), 'resource', 'icons', name+'.png')
+        return QIcon(QPixmap(icon_file))
 
     def shutdown_plugin(self):
         self._update_thread.kill()
